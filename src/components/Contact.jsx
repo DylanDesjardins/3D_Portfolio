@@ -7,7 +7,6 @@ import { EarthCanvas } from "./canvas";
 import { SectionWrapper } from "../hoc";
 import { slideIn } from "../utils/motion";
 
-
 const Contact = () => {
   const formRef = useRef();
   const [form, setForm] = useState({
@@ -20,47 +19,43 @@ const Contact = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setForm({...form, [name]: value })
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
 
+    emailjs.send(
+      'service_l37l66z',
+      'template_zt8u7xs',
+      {
+        from_name: form.name,
+        to_name: 'Dylan',
+        from_email: form.email,
+        to_email: 'dylandesjardins79@gmail.com',
+        message: form.message,
+      },
+      'GHqJhDYjsRImpWfrz'
+    )
+      .then(() => {
+        setLoading(false);
+        alert('Thank you. I will reply as soon as possible.');
 
-emailjs.send(
-  'service_l37l66z', 
-'template_zt8u7xs', 
-{
-from_name: form.name, 
-to_name: 'Dylan',
-from_email: form.email,
-to_email: 'dylandesjardins79@gmail.com',
-message: form.message,
-},
-'GHqJhDYjsRImpWfrz'
-)
-.then(() => {
-  setLoading=(false);
-  alert('Thank you. I will reply as soon as possible.');
-
-  setForm({
-    name:'',
-    email:'',
-    message:'',
-  })
-}, (error) => {
-  setLoading(false)
-  console.log(error);
-  alert('something went wrong.')
-})
-  }
+        setForm({
+          name: '',
+          email: '',
+          message: '',
+        });
+      }, (error) => {
+        setLoading(false);
+        console.log(error);
+        alert('Something went wrong.');
+      });
+  };
 
   return (
-    <div
-      className={`xl:mt-12 flex xl:flex-row flex-col-reverse gap-10 overflow-hidden`}
-    >
+    <div className={`xl:mt-12 flex xl:flex-row flex-col-reverse gap-10 overflow-hidden`}>
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
         className='flex-[0.75] bg-black-100 p-8 rounded-2xl'
